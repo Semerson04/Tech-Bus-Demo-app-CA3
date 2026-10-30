@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coach and Go - Ireland</title>
+    <style>
+        :root {
+            --bg-purple: #3e1f47;
+            --bg-purple-dark: #291231;
+            --tennis-green: #2e8b57;
+            --tennis-green-hover: #236b43;
+            --accent-blue: #1e40af;
+            --court-blue: #1d4ed8;
+            --ball-yellow: #ccff00;
+            --text-light: #f8fafc;
+            --text-dark: #1e293b;
+            --card-bg: #ffffff;
+            --gray-bg: #f8fafc;
+            --border-color: #cbd5e1;
+            --green: #16a34a;
+            --red: #dc2626;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-purple);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Tennis-themed Header with Court Net Divider */
+        header {
+            background: linear-gradient(135deg, var(--bg-purple-dark), var(--bg-purple));
+            color: var(--text-light);
+            width: 100%;
+            padding: 1.5rem 1rem 1.8rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px dashed rgba(204, 255, 0, 0.4);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Small Tennis Ball Icon */
+        .tennis-ball-icon {
+            width: 20px;
+            height: 20px;
+            background-color: var(--ball-yellow);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: inset -2px -2px 4px rgba(0,0,0,0.3);
+            border: 1px solid #9acd32;
+        }
+
+        header h1 {
+            font-size: 1.6rem;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        header p {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: var(--card-bg);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 25px rgba(0,0,0,0.4);
+            margin-bottom: 70px;
+        }
+
+        .view-content {
+            padding: 1.2rem;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        /* Navigation Bottom Bar (Tennis Court Green style) */
+        nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 600px;
+            background-color: var(--bg-purple-dark);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.6rem 0;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.4);
+            z-index: 1000;
+            border-top: 2px solid var(--tennis-green);
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            flex: 1;
+            padding: 0.3rem;
+            transition: color 0.2s;
+        }
+
+        nav button.active {
+            color: var(--ball-yellow);
+            font-weight: bold;
+        }
+
+        nav button svg {
+            width: 22px;
+            height: 22px;
+            margin-bottom: 3px;
+            fill: currentColor;
+        }
+
+        /* Forms & Inputs */
+        .form-group {
+            margin-bottom: 1.1rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+            color: var(--text-dark);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background-color: #fff;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--tennis-green);
+            box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.2);
+        }
+
+        button.btn {
+            background-color: var(--tennis-green);
+            color: white;
+            border: none;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        button.btn:hover {
+            background-color: var(--tennis-green-hover);
+        }
+
+        button.btn:active {
+            transform: scale(0.98);
+        }
+
+        button.btn-danger {
+            background-color: var(--red);
+        }
+        button.btn-danger:hover {
+            background-color: #b91c1c;
+        }
+
+        /* Cards & Lists with Court Border Styling */
+        .card {
+            background: var(--gray-bg);
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--tennis-green);
+            border-radius: 8px;
+            padding: 1.1rem;
+            margin-bottom: 1.1rem;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+
+        .sample-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-color: #e2e8f0;
+            color: #475569;
+            font-size: 0.65rem;
+            padding: 3px 7px;
+            border-radius: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card h3 {
+            font-size: 1.15rem;
+            color: var(--bg-purple);
+            margin-bottom: 0.4rem;
+            padding-right: 70px;
+        }
+
+        .card p {
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+            color: #475569;
+        }
+
+        .card-actions {
+            margin-top: 0.9rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--border-color);
+            border-top: 3px solid var(--court-blue);
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.7rem;
+        }
+
+        .filter-grid .full-width {
+            grid-column: span 2;
+        }
+
+        /* Status Colors for Bookings */
+        .badge-status {
+            display: inline-block;
+            padding: 3px 9px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .bg-upcoming { background-color: var(--green); }
+        .bg-passed { background-color: var(--court-blue); }
+        .bg-cancelled { background-color: var(--red); }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 1rem;
+        }
+        .modal-content {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 420px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border-top: 5px solid var(--tennis-green);
+        }
+        .close-modal {
+            float: right;
+            font-size: 1.4rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: #64748b;
+        }
+        
+        .alert {
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+        }
+        .alert-success { background-color: #dcfce7; color: #166534; }
+        .alert-error { background-color: #fee2e2; color: #991b1b; }
+
+        .section-title {
+            font-size: 1.15rem;
+            color: var(--bg-purple);
+            margin-bottom: 0.9rem;
+            border-bottom: 2px solid var(--tennis-green);
+            padding-bottom: 0.3rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-brand">
+            <span class="tennis-ball-icon"></span>
+            <h1>Coach and Go</h1>
+            <span class="tennis-ball-icon"></span>
+        </div>
+        <p>Racket Sports Coaching Network Ireland</p>
+    </header>
+
+    <div class="container">
+        <div class="view-content">
+
+            <!-- VIEW 1: COACH PROFILES & SEARCH -->
+            <div id="view-coaches" class="view active">
+                <h2 class="section-title">Available Coaches</h2>
+                
+                <div class="filter-section">
+                    <div class="filter-grid">
+                        <div class="full-width">
+                            <label>Search Location</label>
+                            <input type="text" id="filter-location" placeholder="e.g. Dublin, Cork..." oninput="renderCoaches()">
+                        </div>
+                        <div>
+                            <label>Coach Level</label>
+                            <select id="filter-level" onchange="renderCoaches()">
+                                <option value="">All Levels</option>
+                                <option value="1">Level 1</option>
+                                <option value="2">Level 2</option>
+                                <option value="3">Level 3</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Duration</label>
+                            <select id="filter-duration" onchange="renderCoaches()">
+                                <option value="">Any Duration</option>
+                                <option value="1">1 Hour</option>
+                                <option value="1.5">1.5 Hours</option>
+                                <option value="2">2 Hours</option>
+                            </select>
+                        </div>
+                        <div class="full-width">
+                            <label>Day of Availability</label>
+                            <select id="filter-day" onchange="renderCoaches()">
+                                <option value="">Any Day</option>
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                                <option value="Saturday">Saturday</option>
+                                <option value="Sunday">Sunday</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="coach-list"></div>
+            </div>
+
+            <!-- VIEW 2: MY BOOKINGS -->
+            <div id="view-bookings" class="view">
+                <h2 class="section-title">My Bookings</h2>
+
+                <div class="filter-section">
+                    <div class="filter-grid">
+                        <div>
+                            <label>Status Filter</label>
+                            <select id="booking-status-filter" onchange="renderBookings()">
+                                <option value="">All Statuses</option>
+                                <option value="upcoming">Upcoming (Green)</option>
+                                <option value="passed">Passed (Blue)</option>
+                                <option value="cancelled">Cancelled (Red)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Duration Filter</label>
+                            <select id="booking-duration-filter" onchange="renderBookings()">
+                                <option value="">All Durations</option>
+                                <option value="1">1 Hour</option>
+                                <option value="1.5">1.5 Hours</option>
+                                <option value="2">2 Hours</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="bookings-list"></div>
+            </div>
+
+            <!-- VIEW 3: PLAYER PROFILE -->
+            <div id="view-player" class="view">
+                <h2 class="section-title">My Player Profile</h2>
+                <div id="player-alert"></div>
+                <form id="player-form" onsubmit="savePlayerProfile(event)">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="player-username" required placeholder="e.g. tennis_player_ireland">
+                    </div>
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="player-name" required placeholder="e.g. Siobhán Ní Mhaoláin">
+                    </div>
+                    <div class="form-group">
+                        <label>Age</label>
+                        <input type="number" id="player-age" required min="5" max="100" placeholder="e.g. 28">
+                    </div>
+                    <div class="form-group">
+                        <label>Playing Level</label>
+                        <select id="player-level" required>
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                            <option value="Professional">Professional</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Details (Phone / Email)</label>
+                        <input type="text" id="player-contact" required placeholder="e.g. +353 87 555 1234">
+                    </div>
+                    <button type="submit" class="btn">Save Player Profile</button>
+                </form>
+            </div>
+
+            <!-- VIEW 4: COACH SIGN UP -->
+            <div id="view-coach-signup" class="view">
+                <h2 class="section-title">Coach Sign Up</h2>
+                <div id="coach-signup-alert"></div>
+                <form id="coach-signup-form" onsubmit="saveCoachSignup(event)">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="c-username" required placeholder="e.g. coach_ciaran">
+                    </div>
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="c-name" required placeholder="e.g. Ciarán Ó Ríordáin">
+                    </div>
+                    <div class="form-group">
+                        <label>Experience (Years & Countries)</label>
+                        <textarea id="c-experience" required placeholder="e.g. 6 years coaching, taught in Ireland and France"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Coach Level</label>
+                        <select id="c-level" required>
+                            <option value="1">Level 1</option>
+                            <option value="2">Level 2</option>
+                            <option value="3">Level 3</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Location / Club</label>
+                        <input type="text" id="c-location" required placeholder="e.g. Lansdowne Tennis Club, Dublin">
+                    </div>
+                    <div class="form-group">
+                        <label>Hourly Rate (€)</label>
+                        <select id="c-rate" required>
+                            <option value="40">€40 / hour</option>
+                            <option value="50">€50 / hour</option>
+                            <option value="60">€60 / hour</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Available Day</label>
+                        <select id="c-day" required>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Daily 3-Hour Available Window (Start Time)</label>
+                        <select id="c-window-start" required>
+                            <option value="06:00">06:00 - 09:00</option>
+                            <option value="09:00">09:00 - 12:00</option>
+                            <option value="12:00">12:00 - 15:00</option>
+                            <option value="15:00">15:00 - 18:00</option>
+                            <option value="18:00">18:00 - 21:00</option>
+                            <option value="19:00">19:00 - 22:00</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Max Lesson Duration Offered</label>
+                        <select id="c-duration" required>
+                            <option value="1">1 Hour</option>
+                            <option value="1.5">1.5 Hours</option>
+                            <option value="2">2 Hours</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Details</label>
+                        <input type="text" id="c-contact" required placeholder="e.g. ciaran@tennis.ie">
+                    </div>
+                    <button type="submit" class="btn">Register Coach Profile</button>
+                </form>
+            </div>
+
+        </div>
+
+        <!-- NAVIGATION BAR -->
+        <nav>
+            <button onclick="switchView('coaches', this)" class="active">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                Coach Profile
+            </button>
+            <button onclick="switchView('bookings', this)">
+                <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V9h14v10zM5 7V5h14v2H5z"/></svg>
+                My Bookings
+            </button>
+            <button onclick="switchView('player', this)">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                Player Profile
+            </button>
+            <button onclick="switchView('coach-signup', this)">
+                <svg viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                Coach Sign Up
+            </button>
+        </nav>
+    </div>
+
+    <!-- BOOKING MODAL -->
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h3 id="modal-coach-name" style="margin-bottom:0.5rem; color:var(--bg-purple);">Book Lesson</h3>
+            <p id="modal-coach-info" style="font-size:0.85rem; color:#64748b; margin-bottom:1rem;"></p>
+            
+            <div id="modal-alert"></div>
+
+            <form id="booking-form" onsubmit="confirmBooking(event)">
+                <input type="hidden" id="modal-coach-id">
+                
+                <div class="form-group">
+                    <label>Select Day</label>
+                    <select id="modal-day" required onchange="updateTimeSlots()"></select>
+                </div>
+
+                <div class="form-group">
+                    <label>Lesson Start Time (Within 3-hr Window: <span id="modal-window-label"></span>)</label>
+                    <select id="modal-time" required></select>
+                    <small style="color:#64748b; font-size:0.75rem;">Starts must be on the hour or half hour.</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Duration (Hours)</label>
+                    <select id="modal-duration" required onchange="updateTimeSlots()">
+                        <option value="1">1 Hour</option>
+                        <option value="1.5">1.5 Hours</option>
+                        <option value="2">2 Hours</option>
+                    </select>
+                </div>
+
+                <div style="background:var(--gray-bg); padding:0.8rem; border-radius:6px; margin-bottom:1rem; font-size:0.9rem; border: 1px solid var(--border-color);">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:0.3rem;">
+                        <span>Hourly Rate:</span> <strong id="modal-rate-display">€0</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:0.3rem;">
+                        <span>Booking Fee:</span> <strong>€2.50</strong>
+                    </div>
+                    <hr style="margin:0.3rem 0; border:0; border-top:1px solid #cbd5e1;">
+                    <div style="display:flex; justify-content:space-between; color:var(--bg-purple); font-size:1rem;">
+                        <span>Total Estimated:</span> <strong id="modal-total-display">€0</strong>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Confirm & Book (€2.50 Fee)</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Pre-loaded Sample Data (8 Coaches)
+        const sampleCoaches = [
+            {
+                id: "sample-1",
+                username: "cian_tennis",
+                name: "Cian Murphy",
+                experience: "7 years coaching. Taught in Ireland and Australia.",
+                level: "2",
+                location: "Dublin South",
+                rate: 50,
+                days: ["Monday", "Wednesday", "Friday"],
+                windowStart: "09:00",
+                windowEnd: "12:00",
+                maxDuration: 2,
+                contact: "cian@tennis.ie",
+                isSample: true
+            },
+            {
+                id: "sample-2",
+                username: "aoife_badminton",
+                name: "Aoife O'Brien",
+                experience: "5 years coaching National Junior squads in Ireland.",
+                level: "3",
+                location: "Cork City",
+                rate: 60,
+                days: ["Tuesday", "Thursday"],
+                windowStart: "18:00",
+                windowEnd: "21:00",
+                maxDuration: 1.5,
+                contact: "aoife@badmintoncork.ie",
+                isSample: true
+            },
+            {
+                id: "sample-3",
+                username: "padraig_squash",
+                name: "Padraig Walsh",
+                experience: "10 years pro circuit coach, UK and Ireland.",
+                level: "3",
+                location: "Galway",
+                rate: 60,
+                days: ["Monday", "Thursday", "Saturday"],
+                windowStart: "10:00",
+                windowEnd: "13:00",
+                maxDuration: 2,
+                contact: "padraig@squashgalway.ie",
+                isSample: true
+            },
+            {
+                id: "sample-4",
+                username: "niamh_tennis",
+                name: "Niamh Kelly",
+                experience: "4 years coaching collegiate players in USA & Limerick.",
+                level: "1",
+                location: "Limerick",
+                rate: 40,
+                days: ["Wednesday", "Saturday", "Sunday"],
+                windowStart: "14:00",
+                windowEnd: "17:00",
+                maxDuration: 1,
+                contact: "niamh.k@sport.ie",
+                isSample: true
+            },
+            {
+                id: "sample-5",
+                username: "sean_rackets",
+                name: "Sean Fitzgerald",
+                experience: "6 years multi-racket coach across Dublin clubs.",
+                level: "2",
+                location: "Dublin North",
+                rate: 50,
+                days: ["Tuesday", "Friday", "Sunday"],
+                windowStart: "08:00",
+                windowEnd: "11:00",
+                maxDuration: 2,
+                contact: "sean@rackets.ie",
+                isSample: true
+            },
+            {
+                id: "sample-6",
+                username: "sinead_tennis",
+                name: "Sinead Byrne",
+                experience: "3 years assistant coach, Leinster Performance.",
+                level: "1",
+                location: "Kildare",
+                rate: 40,
+                days: ["Monday", "Wednesday"],
+                windowStart: "16:00",
+                windowEnd: "19:00",
+                maxDuration: 1.5,
+                contact: "sinead@kildaretennis.ie",
+                isSample: true
+            },
+            {
+                id: "sample-7",
+                username: "conor_badminton",
+                name: "Conor Doyle",
+                experience: "9 years elite coach in Belfast and Dublin.",
+                level: "3",
+                location: "Dublin City",
+                rate: 60,
+                days: ["Thursday", "Saturday"],
+                windowStart: "11:00",
+                windowEnd: "14:00",
+                maxDuration: 2,
+                contact: "conor@badminton.ie",
+                isSample: true
+            },
+            {
+                id: "sample-8",
+                username: "emma_tennis",
+                name: "Emma Ryan",
+                experience: "4 years junior development coach, Waterford.",
+                level: "2",
+                location: "Waterford",
+                rate: 45,
+                days: ["Tuesday", "Friday", "Sunday"],
+                windowStart: "15:00",
+                windowEnd: "18:00",
+                maxDuration: 1,
+                contact: "emma@waterfordtennis.sig",
+                isSample: true
+            }
+        ];
+
+        const samplePlayer = {
+            username: "player_sample_01",
+            name: "Alex Higgins",
+            age: 22,
+            level: "Intermediate",
+            contact: "+353 83 999 8877",
+            isSample: true
+        };
+
+        const sampleBookings = [
+            {
+                id: "book-sample-1",
+                coachName: "Cian Murphy",
+                location: "Dublin South",
+                hourlyCost: 50,
+                day: "Monday",
+                time: "10:00",
+                duration: 1,
+                bookingFee: 2.50,
+                status: "upcoming",
+                playerUsername: "player_sample_01"
+            },
+            {
+                id: "book-sample-2",
+                coachName: "Aoife O'Brien",
+                location: "Cork City",
+                hourlyCost: 60,
+                day: "Tuesday",
+                time: "18:30",
+                duration: 1.5,
+                bookingFee: 2.50,
+                status: "passed",
+                playerUsername: "player_sample_01"
+            }
+        ];
+
+        // LocalStorage Persistence Initialization
+        function initStorage() {
+            if (!localStorage.getItem('coaches')) {
+                localStorage.setItem('coaches', JSON.stringify(sampleCoaches));
+            }
+            if (!localStorage.getItem('playerProfile')) {
+                localStorage.setItem('playerProfile', JSON.stringify(samplePlayer));
+            }
+            if (!localStorage.getItem('bookings')) {
+                localStorage.setItem('bookings', JSON.stringify(sampleBookings));
+            }
+        }
+
+        function getCoaches() { return JSON.parse(localStorage.getItem('coaches')) || []; }
+        function getBookings() { return JSON.parse(localStorage.getItem('bookings')) || []; }
+        function getPlayerProfile() { return JSON.parse(localStorage.getItem('playerProfile')) || {}; }
+
+        // Navigation View Switcher
+        function switchView(viewId, btnElement) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById('view-' + viewId).classList.add('active');
+            if (btnElement) btnElement.classList.add('active');
+
+            if (viewId === 'player') loadPlayerForm();
+            if (viewId === 'bookings') renderBookings();
+            if (viewId === 'coaches') renderCoaches();
+        }
+
+        // Render & Search Coaches
+        function renderCoaches() {
+            const coaches = getCoaches();
+            const listContainer = document.getElementById('coach-list');
+            
+            const locQuery = document.getElementById('filter-location').value.toLowerCase();
+            const levelQuery = document.getElementById('filter-level').value;
+            const durationQuery = document.getElementById('filter-duration').value;
+            const dayQuery = document.getElementById('filter-day').value;
+
+            const filtered = coaches.filter(c => {
+                const matchLoc = c.location.toLowerCase().includes(locQuery);
+                const matchLevel = levelQuery === "" || c.level === levelQuery;
+                const matchDuration = durationQuery === "" || c.maxDuration >= parseFloat(durationQuery);
+                const matchDay = dayQuery === "" || c.days.includes(dayQuery);
+                return matchLoc && matchLevel && matchDuration && matchDay;
+            });
+
+            if (filtered.length === 0) {
+                listContainer.innerHTML = `<p style="text-align:center; color:#64748b; padding:2rem;">No coaches match your search criteria.</p>`;
+                return;
+            }
+
+            listContainer.innerHTML = filtered.map(c => `
+                <div class="card">
+                    ${c.isSample ? '<span class="sample-badge">Sample Data</span>' : ''}
+                    <h3>${c.name} (Level ${c.level})</h3>
+                    <p><strong>Location:</strong> ${c.location}</p>
+                    <p><strong>Experience:</strong> ${c.experience}</p>
+                    <p><strong>Rate:</strong> €${c.rate}/hr | <strong>Max Duration:</strong> ${c.maxDuration} hr(s)</p>
+                    <p><strong>Availability:</strong> ${c.days.join(', ')} (${c.windowStart} - ${c.windowEnd})</p>
+                    <p><strong>Contact:</strong> ${c.contact}</p>
+                    <div class="card-actions">
+                        <button class="btn" onclick="openBookingModal('${c.id}')">Book Lesson</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Booking Modal Logic
+        function openBookingModal(coachId) {
+            const coaches = getCoaches();
+            const coach = coaches.find(c => c.id === coachId);
+            if (!coach) return;
+
+            document.getElementById('modal-coach-id').value = coach.id;
+            document.getElementById('modal-coach-name').innerText = `Book with ${coach.name}`;
+            document.getElementById('modal-coach-info').innerText = `${coach.location} • €${coach.rate}/hr • Max ${coach.maxDuration}h`;
+            document.getElementById('modal-window-label').innerText = `${coach.windowStart} to ${coach.windowEnd}`;
+
+            const daySelect = document.getElementById('modal-day');
+            daySelect.innerHTML = coach.days.map(d => `<option value="${d}">${d}</option>`).join('');
+
+            const durationSelect = document.getElementById('modal-duration');
+            let durationOptions = `<option value="1">1 Hour</option>`;
+            if (coach.maxDuration >= 1.5) durationOptions += `<option value="1.5">1.5 Hours</option>`;
+            if (coach.maxDuration >= 2) durationOptions += `<option value="2">2 Hours</option>`;
+            durationSelect.innerHTML = durationOptions;
+
+            updateTimeSlots();
+            document.getElementById('modal-alert').innerHTML = '';
+            document.getElementById('booking-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('booking-modal').style.display = 'none';
+        }
+
+        function timeToMinutes(t) {
+            const parts = t.split(':');
+            return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+        }
+
+        function minutesToTime(m) {
+            const h = Math.floor(m / 60).toString().padStart(2, '0');
+            const min = (m % 60).toString().padStart(2, '0');
+            return `${h}:${min}`;
+        }
+
+        function updateTimeSlots() {
+            const coachId = document.getElementById('modal-coach-id').value;
+            const coaches = getCoaches();
+            const coach = coaches.find(c => c.id === coachId);
+            if (!coach) return;
+
+            const duration = parseFloat(document.getElementById('modal-duration').value);
+            const timeSelect = document.getElementById('modal-time');
+
+            const startMin = timeToMinutes(coach.windowStart);
+            const endMin = timeToMinutes(coach.windowEnd);
+            const durationMin = duration * 60;
+
+            let slots = [];
+            for (let m = startMin; m + durationMin <= endMin; m += 30) {
+                slots.push(minutesToTime(m));
+            }
+
+            timeSelect.innerHTML = slots.map(s => `<option value="${s}">${s}</option>`).join('');
+            
+            const rate = coach.rate;
+            const total = (rate * duration) + 2.50;
+            document.getElementById('modal-rate-display').innerText = `€${(rate * duration).toFixed(2)}`;
+            document.getElementById('modal-total-display').innerText = `€${total.toFixed(2)}`;
+        }
+
+        document.getElementById('modal-duration').addEventListener('change', updateTimeSlots);
+
+        function confirmBooking(event) {
+            event.preventDefault();
+            const player = getPlayerProfile();
+            if (!player.username) {
+                document.getElementById('modal-alert').innerHTML = `<div class="alert alert-error">Please complete your Player Profile before booking!</div>`;
+                return;
+            }
+
+            const coachId = document.getElementById('modal-coach-id').value;
+            const coaches = getCoaches();
+            const coach = coaches.find(c => c.id === coachId);
+
+            const day = document.getElementById('modal-day').value;
+            const time = document.getElementById('modal-time').value;
+            const duration = parseFloat(document.getElementById('modal-duration').value);
+
+            const newBooking = {
+                id: 'book-' + Date.now(),
+                coachName: coach.name,
+                location: coach.location,
+                hourlyCost: coach.rate,
+                day: day,
+                time: time,
+                duration: duration,
+                bookingFee: 2.50,
+                status: 'upcoming',
+                playerUsername: player.username
+            };
+
+            const bookings = getBookings();
+            bookings.unshift(newBooking);
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+
+            closeModal();
+            switchView('bookings', document.querySelector('nav button:nth-child(2)'));
+        }
+
+        // Render & Filter Bookings
+        function renderBookings() {
+            const bookings = getBookings();
+            const listContainer = document.getElementById('bookings-list');
+
+            const statusFilter = document.getElementById('booking-status-filter').value;
+            const durationFilter = document.getElementById('booking-duration-filter').value;
+
+            const filtered = bookings.filter(b => {
+                const matchStatus = statusFilter === "" || b.status === statusFilter;
+                const matchDuration = durationFilter === "" || b.duration.toString() === durationFilter;
+                return matchStatus && matchDuration;
+            });
+
+            if (filtered.length === 0) {
+                listContainer.innerHTML = `<p style="text-align:center; color:#64748b; padding:2rem;">No bookings found matching your filters.</p>`;
+                return;
+            }
+
+            listContainer.innerHTML = filtered.map(b => {
+                let badgeClass = 'bg-upcoming';
+                let statusText = 'Upcoming Event';
+                if (b.status === 'passed') { badgeClass = 'bg-passed'; statusText = 'Passed Event'; }
+                if (b.status === 'cancelled') { badgeClass = 'bg-cancelled'; statusText = 'Cancelled'; }
+
+                return `
+                    <div class="card">
+                        <span class="badge-status ${badgeClass}">${statusText}</span>
+                        <h3>${b.coachName}</h3>
+                        <p><strong>Location:</strong> ${b.location}</p>
+                        <p><strong>Schedule:</strong> ${b.day} at ${b.time} (${b.duration} hr lesson)</p>
+                        <p><strong>Cost:</strong> €${(b.hourlyCost * b.duration).toFixed(2)} + €${b.bookingFee.toFixed(2)} booking fee</p>
+                        <p style="font-size:0.75rem; color:#64748b; margin-top:0.3rem;">Booked by: @${b.playerUsername}</p>
+                        <div class="card-actions">
+                            ${b.status === 'upcoming' ? `<button class="btn btn-danger" onclick="cancelBooking('${b.id}')">Cancel Booking</button>` : ''}
+                            ${b.status !== 'upcoming' ? `<button class="btn" onclick="updateBookingStatus('${b.id}', 'upcoming')">Set Upcoming</button>` : ''}
+                            ${b.status !== 'passed' ? `<button class="btn" onclick="updateBookingStatus('${b.id}', 'passed')">Set Passed</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function cancelBooking(id) {
+            let bookings = getBookings();
+            bookings = bookings.map(b => b.id === id ? {...b, status: 'cancelled'} : b);
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+            renderBookings();
+        }
+
+        function updateBookingStatus(id, status) {
+            let bookings = getBookings();
+            bookings = bookings.map(b => b.id === id ? {...b, status: status} : b);
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+            renderBookings();
+        }
+
+        // Player Profile Logic
+        function loadPlayerForm() {
+            const player = getPlayerProfile();
+            document.getElementById('player-username').value = player.username || '';
+            document.getElementById('player-name').value = player.name || '';
+            document.getElementById('player-age').value = player.age || '';
+            document.getElementById('player-level').value = player.level || 'Intermediate';
+            document.getElementById('player-contact').value = player.contact || '';
+            document.getElementById('player-alert').innerHTML = '';
+        }
+
+        function savePlayerProfile(event) {
+            event.preventDefault();
+            const player = {
+                username: document.getElementById('player-username').value,
+                name: document.getElementById('player-name').value,
+                age: document.getElementById('player-age').value,
+                level: document.getElementById('player-level').value,
+                contact: document.getElementById('player-contact').value,
+                isSample: false
+            };
+            localStorage.setItem('playerProfile', JSON.stringify(player));
+            document.getElementById('player-alert').innerHTML = `<div class="alert alert-success">Player profile saved successfully!</div>`;
+        }
+
+        // Coach Sign Up Logic
+        function saveCoachSignup(event) {
+            event.preventDefault();
+            const winStart = document.getElementById('c-window-start').value;
+            const startMin = timeToMinutes(winStart);
+            const endMin = startMin + 180; // 3-hour window
+            const winEnd = minutesToTime(endMin);
+
+            const newCoach = {
+                id: 'coach-' + Date.now(),
+                username: document.getElementById('c-username').value,
+                name: document.getElementById('c-name').value,
+                experience: document.getElementById('c-experience').value,
+                level: document.getElementById('c-level').value,
+                location: document.getElementById('c-location').value,
+                rate: parseFloat(document.getElementById('c-rate').value),
+                days: [document.getElementById('c-day').value],
+                windowStart: winStart,
+                windowEnd: winEnd,
+                maxDuration: parseFloat(document.getElementById('c-duration').value),
+                contact: document.getElementById('c-contact').value,
+                isSample: false
+            };
+
+            const coaches = getCoaches();
+            coaches.unshift(newCoach);
+            localStorage.setItem('coaches', JSON.stringify(coaches));
+
+            document.getElementById('coach-signup-alert').innerHTML = `<div class="alert alert-success">Coach profile created successfully! View it in the Coach Profile tab.</div>`;
+            document.getElementById('coach-signup-form').reset();
+        }
+
+        // App Initialization
+        window.onload = function() {
+            initStorage();
+            renderCoaches();
+        };
+    </script>
+</body>
+</html>
